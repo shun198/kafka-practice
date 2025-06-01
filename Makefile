@@ -4,5 +4,5 @@ up:
 down:
 	docker compose down
 
-format
+format:
 	uv run ruff format
