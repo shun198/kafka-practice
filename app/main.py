@@ -1,21 +1,23 @@
 from confluent_kafka import Consumer
 import json
 import logging
+import os
 
 
 logging.basicConfig(level=logging.INFO)
 
 
 conf = {
-    'bootstrap.servers': 'localhost:9092',
-    'group.id': 'fastapi-consumer-group',
-    'auto.offset.reset': 'earliest'
+    "bootstrap.servers": os.environ.get("BROKER_URL"),
+    "group.id": os.environ.get("GROUP_ID"),
+    "auto.offset.reset": "earliest",
 }
+
 
 # https://docs.confluent.io/kafka-clients/python/current/overview.html#ak-consumer
 def consume_messages():
     consumer = Consumer(conf)
-    consumer.subscribe(['my-topic'])
+    consumer.subscribe([os.environ.get("TOPIC_NAME")])
     try:
         while True:
             msg = consumer.poll(1.0)
@@ -25,7 +27,7 @@ def consume_messages():
             if msg.error():
                 print(f"Error while consuming messages: {msg.error()}")
                 logging.error(msg.error())
-            data = json.loads(msg.value().decode('utf-8'))
+            data = json.loads(msg.value().decode("utf-8"))
             print(f"message: {data}")
             logging.info(data)
     finally:
@@ -36,6 +38,7 @@ def consume_messages():
 def startup():
     logging.info("Starting consumer...")
     consume_messages()
+
 
 # https://stackoverflow.com/questions/75839415/kafka-fastapi-docker-template
 if __name__ == "__main__":
