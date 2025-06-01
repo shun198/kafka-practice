@@ -2,10 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger",
+            "name": "Batch Debug",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/main.py",
+            "program": "${workspaceFolder}/batch/main.py",
+            "justMyCode": false,
+            "cwd" : "${workspaceFolder}/",
+            "python": "${workspaceFolder}/.venv/bin/python"
+        },
+        {
+            "name": "App Debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/main.py",
             "justMyCode": false,
             "cwd" : "${workspaceFolder}/",
             "python": "${workspaceFolder}/.venv/bin/python"
